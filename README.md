@@ -2,6 +2,8 @@
 
 A web-based tuner for guitar and ukulele with real-time pitch detection.
 
+**Live**: https://joo1es.github.io/tuner/
+
 ## Features
 
 - **Pitch Detection** — YIN algorithm for accurate frequency detection from microphone input
@@ -11,6 +13,7 @@ A web-based tuner for guitar and ukulele with real-time pitch detection.
 - **Dark/Light Theme** — Auto-follows system preference, manual toggle available
 - **Auto-start** — Remembers microphone permission, starts listening automatically
 - **Mobile-first** — Responsive layout optimized for phones
+- **i18n** — Chinese/English auto-detection based on browser language
 
 ## Tech Stack
 
