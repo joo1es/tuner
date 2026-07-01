@@ -1,45 +1,45 @@
 :root {
-  --bg: #0b0b1e;
-  --bg-card: #12122a;
-  --bg-elevated: #1a1a3a;
-  --text: #eaeaff;
-  --text-secondary: #9090b8;
-  --accent: #7c7cf0;
-  --accent-dim: #5050a0;
-  --accent-glow: rgba(124, 124, 240, 0.25);
-  --border: rgba(124, 124, 240, 0.15);
-  --meter-bg: #1e1e40;
-  --needle: #ffffff;
-  --in-tune: #3ddc84;
-  --in-tune-glow: rgba(61, 220, 132, 0.4);
-  --flat: #ff5252;
-  --sharp: #ffab40;
-  --warning: #ffd740;
-  --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --bg: #0f1117;
+  --bg-card: #1a1d27;
+  --bg-elevated: #22262f;
+  --text: #e8e6e3;
+  --text-secondary: #8a8d93;
+  --accent: #d4943a;
+  --accent-dim: #b87a28;
+  --accent-glow: rgba(212, 148, 58, 0.2);
+  --border: rgba(255, 255, 255, 0.06);
+  --meter-bg: #22262f;
+  --needle: #e8e6e3;
+  --in-tune: #4ade80;
+  --in-tune-glow: rgba(74, 222, 128, 0.35);
+  --flat: #f87171;
+  --sharp: #fb923c;
+  --warning: #fbbf24;
+  --shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+  --shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.3);
   --radius: 16px;
   --radius-sm: 12px;
 }
 
 body.light {
-  --bg: #f0f2f8;
+  --bg: #f3f1ed;
   --bg-card: #ffffff;
-  --bg-elevated: #f7f8fc;
-  --text: #1a1a3e;
-  --text-secondary: #7070a0;
-  --accent: #5856d6;
-  --accent-dim: #807ec8;
-  --accent-glow: rgba(88, 86, 214, 0.15);
-  --border: rgba(88, 86, 214, 0.12);
-  --meter-bg: #e8e8f4;
-  --needle: #333366;
-  --in-tune: #2cb67d;
-  --in-tune-glow: rgba(44, 182, 125, 0.3);
-  --flat: #e53935;
-  --sharp: #ef6c00;
-  --warning: #f9a825;
-  --shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --bg-elevated: #faf9f7;
+  --text: #1c1917;
+  --text-secondary: #78716c;
+  --accent: #b87a28;
+  --accent-dim: #924e1c;
+  --accent-glow: rgba(184, 122, 40, 0.12);
+  --border: rgba(0, 0, 0, 0.06);
+  --meter-bg: #f5f3ef;
+  --needle: #292524;
+  --in-tune: #16a34a;
+  --in-tune-glow: rgba(22, 163, 74, 0.25);
+  --flat: #dc2626;
+  --sharp: #ea580c;
+  --warning: #d97706;
+  --shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+  --shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.04);
 }
 
 * {
@@ -78,7 +78,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 32px;
+  margin-bottom: 28px;
 }
 
 .logo {
@@ -88,81 +88,75 @@ body {
 }
 
 .logo-icon {
-  width: 36px;
-  height: 36px;
+  width: 34px;
+  height: 34px;
   border-radius: 10px;
-  background: linear-gradient(135deg, var(--accent), var(--accent-dim));
+  background: var(--accent);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: #fff;
-  box-shadow: var(--shadow-sm);
 }
 
 h1 {
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   font-weight: 700;
   letter-spacing: 1.5px;
   color: var(--text);
 }
 
-.theme-toggle {
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
-  border: 1.5px solid var(--border);
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.icon-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
   background: var(--bg-card);
   color: var(--text-secondary);
-  font-size: 1.15rem;
+  font-size: 1rem;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.25s ease;
-  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
 }
-.theme-toggle:hover {
-  border-color: var(--accent);
+.icon-btn:hover {
   color: var(--accent);
-  transform: scale(1.05);
+  border-color: var(--accent);
 }
-.theme-toggle:active {
-  transform: scale(0.95);
-}
-
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+.icon-btn:active {
+  transform: scale(0.92);
 }
 
 .instrument-switch {
   display: flex;
   background: var(--bg-card);
   border-radius: 10px;
-  border: 1.5px solid var(--border);
+  border: 1px solid var(--border);
   overflow: hidden;
-  box-shadow: var(--shadow-sm);
 }
 
 .instrument-option {
-  padding: 8px 14px;
-  font-size: 0.78rem;
+  padding: 7px 13px;
+  font-size: 0.75rem;
   font-weight: 600;
   border: none;
   background: transparent;
   color: var(--text-secondary);
   cursor: pointer;
   transition: all 0.2s ease;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.3px;
 }
-
 .instrument-option.active {
   background: var(--accent);
   color: #fff;
 }
-
 .instrument-option:not(.active):hover {
   color: var(--text);
 }
@@ -172,31 +166,18 @@ h1 {
   background: var(--bg-card);
   border-radius: var(--radius);
   border: 1px solid var(--border);
-  padding: 32px 20px 24px;
+  padding: 28px 20px 20px;
   text-align: center;
   box-shadow: var(--shadow);
-  margin-bottom: 20px;
-  position: relative;
-  overflow: hidden;
-}
-
-.note-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, var(--flat), var(--warning), var(--in-tune), var(--warning), var(--flat));
-  opacity: 0.6;
+  margin-bottom: 14px;
 }
 
 .note-display {
   display: flex;
   align-items: baseline;
   justify-content: center;
-  gap: 6px;
-  margin-bottom: 8px;
+  gap: 4px;
+  margin-bottom: 6px;
 }
 
 .note-name {
@@ -206,9 +187,7 @@ h1 {
   color: var(--text);
   letter-spacing: -2px;
   transition: color 0.2s ease;
-  font-variant-numeric: tabular-nums;
 }
-
 .note-name.in-tune {
   color: var(--in-tune);
   text-shadow: 0 0 40px var(--in-tune-glow);
@@ -221,13 +200,12 @@ h1 {
 }
 
 .cents-display {
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   color: var(--text-secondary);
   height: 1.4em;
   font-variant-numeric: tabular-nums;
   font-weight: 500;
 }
-
 .cents-display.in-tune {
   color: var(--in-tune);
 }
@@ -237,9 +215,9 @@ h1 {
   background: var(--bg-card);
   border-radius: var(--radius);
   border: 1px solid var(--border);
-  padding: 16px 12px 12px;
+  padding: 14px 10px 10px;
   box-shadow: var(--shadow);
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 .meter-canvas {
@@ -253,44 +231,44 @@ h1 {
   background: var(--bg-card);
   border-radius: var(--radius);
   border: 1px solid var(--border);
-  padding: 12px;
+  padding: 10px;
   box-shadow: var(--shadow);
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
 
 .waveform-canvas {
   width: 100%;
-  height: 48px;
+  height: 44px;
   display: block;
-  opacity: 0.6;
+  opacity: 0.5;
 }
 
 /* ===== String Buttons ===== */
 .strings-label {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 600;
   color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 2px;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   text-align: center;
 }
 
 .strings {
   display: flex;
-  gap: 10px;
-  margin-bottom: 28px;
+  gap: 8px;
+  margin-bottom: 24px;
   justify-content: center;
 }
 
 .string-btn {
-  width: 54px;
-  height: 54px;
-  border-radius: 14px;
-  border: 1.5px solid var(--border);
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
   background: var(--bg-card);
   color: var(--text-secondary);
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -299,133 +277,77 @@ h1 {
   align-items: center;
   justify-content: center;
   line-height: 1;
-  gap: 3px;
-  box-shadow: var(--shadow-sm);
-  position: relative;
-  overflow: hidden;
+  gap: 2px;
 }
-
 .string-btn .freq {
-  font-size: 0.45rem;
+  font-size: 0.42rem;
   font-weight: 400;
-  opacity: 0.45;
-  letter-spacing: 0.5px;
+  opacity: 0.4;
 }
-
 .string-btn:active {
-  transform: scale(0.92);
+  transform: scale(0.9);
 }
-
 .string-btn.active {
   border-color: var(--accent);
   color: var(--accent);
   background: var(--accent-glow);
-  box-shadow: 0 0 20px var(--accent-glow);
 }
-
 .string-btn.detected {
   border-color: var(--in-tune);
   color: var(--in-tune);
-  background: rgba(61, 220, 132, 0.1);
-  box-shadow: 0 0 20px rgba(61, 220, 132, 0.2);
+  background: rgba(74, 222, 128, 0.08);
+  box-shadow: 0 0 16px rgba(74, 222, 128, 0.15);
 }
 
-.string-btn.detected::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: 14px;
-  border: 2px solid var(--in-tune);
-  animation: pulse-ring 1.5s ease-out infinite;
-}
-
-@keyframes pulse-ring {
-  0% { opacity: 0.6; transform: scale(1); }
-  100% { opacity: 0; transform: scale(1.25); }
-}
-
-/* ===== Control ===== */
+/* ===== Controls ===== */
 .controls {
   margin-top: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 .start-btn {
   width: 100%;
-  padding: 16px;
-  font-size: 1rem;
+  padding: 15px;
+  font-size: 0.95rem;
   font-weight: 700;
   border: none;
   border-radius: var(--radius-sm);
-  background: linear-gradient(135deg, var(--accent), var(--accent-dim));
-  color: #ffffff;
+  background: var(--accent);
+  color: #fff;
   cursor: pointer;
-  transition: all 0.25s ease;
-  letter-spacing: 1px;
-  box-shadow: 0 4px 20px var(--accent-glow);
-  position: relative;
-  overflow: hidden;
+  transition: all 0.2s ease;
+  letter-spacing: 0.5px;
 }
-
-.start-btn::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
-}
-
 .start-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 28px var(--accent-glow);
+  filter: brightness(1.1);
 }
-
 .start-btn:active {
-  transform: translateY(0) scale(0.98);
+  transform: scale(0.98);
 }
-
 .start-btn.listening {
-  background: linear-gradient(135deg, var(--flat), #c62828);
-  box-shadow: 0 4px 20px rgba(255, 82, 82, 0.3);
+  background: var(--flat);
 }
 
 .status-text {
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   color: var(--text-secondary);
   height: 1.4em;
   text-align: center;
 }
 
-/* ===== Desktop wider ===== */
+/* ===== Responsive ===== */
 @media (min-width: 480px) {
-  .tuner {
-    padding: 32px 24px 48px;
-  }
-  .note-name {
-    font-size: 7rem;
-  }
-  .string-btn {
-    width: 60px;
-    height: 60px;
-  }
+  .tuner { padding: 32px 24px 48px; }
+  .note-name { font-size: 7rem; }
+  .string-btn { width: 58px; height: 58px; }
 }
 
-/* ===== Small phones ===== */
 @media (max-width: 360px) {
-  .tuner {
-    padding: 16px 14px 32px;
-  }
-  .note-name {
-    font-size: 4.5rem;
-  }
-  .string-btn {
-    width: 48px;
-    height: 48px;
-    font-size: 0.85rem;
-  }
-  .strings {
-    gap: 7px;
-  }
+  .tuner { padding: 16px 14px 32px; }
+  .note-name { font-size: 4.2rem; }
+  .string-btn { width: 46px; height: 46px; font-size: 0.82rem; }
+  .strings { gap: 6px; }
 }

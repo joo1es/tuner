@@ -1,9 +1,58 @@
 import './style.css';
 
+// ===== i18n =====
+const LOCALES = {
+  en: {
+    title: 'TUNER',
+    guitar: 'Guitar',
+    ukulele: 'Ukulele',
+    strings: 'Strings',
+    start: 'START LISTENING',
+    stop: 'STOP',
+    requesting: 'Requesting microphone access...',
+    listening: 'Listening \u2014 play a string!',
+    denied: 'Microphone access denied.',
+    detected: 'Microphone detected, starting...',
+    flat: '\u266D',
+    sharp: '\u266F',
+  },
+  zh: {
+    title: '\u8C03\u97F3\u5668',
+    guitar: '\u5409\u4ED6',
+    ukulele: '\u5C3F\u514B\u91CC\u91CC',
+    strings: '\u5F26',
+    start: '\u5F00\u59CB\u76D1\u542C',
+    stop: '\u505C\u6B62',
+    requesting: '\u8BF7\u6C42\u9EA6\u514B\u98CE\u8BBF\u95EE\u6743\u9650...',
+    listening: '\u76D1\u542C\u4E2D \u2014 \u64AD\u653E\u5F26\u5427\uFF01',
+    denied: '\u9EA6\u514B\u98CE\u8BBF\u95EE\u88AB\u62D2\u7EDD\u3002',
+    detected: '\u68C0\u6D4B\u5230\u9EA6\u514B\u98CE\uFF0C\u6B63\u5728\u542F\u52A8...',
+    flat: '\u266D',
+    sharp: '\u266F',
+  },
+};
+
+function getLang() {
+  const saved = localStorage.getItem('tuner-lang');
+  if (saved && LOCALES[saved]) return saved;
+  const browserLang = navigator.language || navigator.userLanguage || '';
+  return browserLang.startsWith('zh') ? 'zh' : 'en';
+}
+
+let lang = getLang();
+let t = LOCALES[lang];
+
+function setLang(newLang) {
+  lang = newLang;
+  t = LOCALES[lang];
+  localStorage.setItem('tuner-lang', lang);
+  applyLang();
+}
+
 // ===== Instruments =====
 const INSTRUMENTS = {
   guitar: {
-    label: 'Guitar',
+    labelKey: 'guitar',
     strings: [
       { name: 'E2', note: 'E', octave: 2, freq: 82.41 },
       { name: 'A2', note: 'A', octave: 2, freq: 110.00 },
@@ -16,7 +65,7 @@ const INSTRUMENTS = {
     maxFreq: 400,
   },
   ukulele: {
-    label: 'Ukulele',
+    labelKey: 'ukulele',
     strings: [
       { name: 'G4', note: 'G', octave: 4, freq: 392.00 },
       { name: 'C4', note: 'C', octave: 4, freq: 261.63 },
@@ -41,14 +90,15 @@ app.innerHTML = `
     <div class="header">
       <div class="logo">
         <div class="logo-icon">&#9835;</div>
-        <h1>TUNER</h1>
+        <h1 id="appTitle"></h1>
       </div>
       <div class="header-actions">
         <div class="instrument-switch" id="instrumentSwitch">
-          <button class="instrument-option active" data-inst="guitar">Guitar</button>
-          <button class="instrument-option" data-inst="ukulele">Ukulele</button>
+          <button class="instrument-option active" data-inst="guitar" id="btnGuitar"></button>
+          <button class="instrument-option" data-inst="ukulele" id="btnUkulele"></button>
         </div>
-        <button class="theme-toggle" id="themeToggle" title="Toggle theme"></button>
+        <button class="icon-btn" id="langToggle" title="Toggle language"></button>
+        <button class="icon-btn" id="themeToggle" title="Toggle theme"></button>
       </div>
     </div>
 
@@ -68,11 +118,11 @@ app.innerHTML = `
       <canvas class="waveform-canvas" id="waveformCanvas"></canvas>
     </div>
 
-    <div class="strings-label">Strings</div>
+    <div class="strings-label" id="stringsLabel"></div>
     <div class="strings" id="stringButtons"></div>
 
     <div class="controls">
-      <button class="start-btn" id="startBtn">START LISTENING</button>
+      <button class="start-btn" id="startBtn"></button>
       <div class="status-text" id="statusText"></div>
     </div>
   </div>
@@ -87,6 +137,21 @@ const startBtn = document.getElementById('startBtn');
 const statusText = document.getElementById('statusText');
 const stringButtonsEl = document.getElementById('stringButtons');
 const themeToggle = document.getElementById('themeToggle');
+const langToggle = document.getElementById('langToggle');
+const appTitle = document.getElementById('appTitle');
+const stringsLabel = document.getElementById('stringsLabel');
+const btnGuitar = document.getElementById('btnGuitar');
+const btnUkulele = document.getElementById('btnUkulele');
+
+// ===== Apply i18n text =====
+function applyLang() {
+  appTitle.textContent = t.title;
+  btnGuitar.textContent = t.guitar;
+  btnUkulele.textContent = t.ukulele;
+  stringsLabel.textContent = t.strings;
+  langToggle.textContent = lang === 'en' ? '\u4E2D' : 'En';
+  if (!isListening) startBtn.textContent = t.start;
+}
 
 // ===== Theme =====
 function isSystemDark() {
@@ -99,7 +164,6 @@ function applyTheme(dark) {
   localStorage.setItem('tuner-theme', dark ? 'dark' : 'light');
 }
 
-// Init: saved preference > system default
 const savedTheme = localStorage.getItem('tuner-theme');
 if (savedTheme) {
   applyTheme(savedTheme === 'dark');
@@ -107,21 +171,20 @@ if (savedTheme) {
   applyTheme(isSystemDark());
 }
 
-// Listen for system theme changes (only when no manual override)
 const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 mediaQuery.addEventListener('change', (e) => {
-  if (!localStorage.getItem('tuner-theme')) {
-    applyTheme(e.matches);
-  }
+  if (!localStorage.getItem('tuner-theme')) applyTheme(e.matches);
 });
 
 themeToggle.addEventListener('click', () => {
   const isDark = !document.body.classList.contains('light');
-  // Clear saved preference so system tracking resumes if they go back to default
-  if (isDark === isSystemDark()) {
-    localStorage.removeItem('tuner-theme');
-  }
+  if (isDark === isSystemDark()) localStorage.removeItem('tuner-theme');
   applyTheme(!isDark);
+});
+
+// ===== Language Toggle =====
+langToggle.addEventListener('click', () => {
+  setLang(lang === 'en' ? 'zh' : 'en');
 });
 
 // ===== State =====
@@ -133,14 +196,13 @@ let isListening = false;
 let animFrameId = null;
 let smoothedFreq = 0;
 let lastSignalTime = 0;
-let micPermissionGranted = false;
 const meterCtx = meterCanvas.getContext('2d');
 const waveCtx = waveformCanvas.getContext('2d');
 
 // ===== String Buttons =====
 function buildStringButtons() {
   stringButtonsEl.innerHTML = '';
-  STRINGS.forEach((s, i) => {
+  STRINGS.forEach((s) => {
     const btn = document.createElement('button');
     btn.className = 'string-btn';
     btn.innerHTML = `${s.name}<span class="freq">${s.freq} Hz</span>`;
@@ -260,14 +322,12 @@ function drawMeter(cents) {
   const cy = h - 8;
   const r = Math.min(w / 2 - 16, h - 20);
 
-  // Background arc
   ctx.beginPath();
   ctx.arc(cx, cy, r, Math.PI, 2 * Math.PI);
   ctx.lineWidth = 4;
   ctx.strokeStyle = getComputedColor('--meter-bg');
   ctx.stroke();
 
-  // Colored zones
   const zones = [
     { from: -50, to: -10, color: getComputedColor('--flat') },
     { from: -10, to: -3, color: getComputedColor('--warning') },
@@ -283,7 +343,6 @@ function drawMeter(cents) {
     ctx.stroke();
   }
 
-  // Tick marks
   for (let c = -50; c <= 50; c += 10) {
     const a = centsToAngle(c);
     const isMajor = c % 50 === 0 || c === 0;
@@ -296,16 +355,14 @@ function drawMeter(cents) {
     ctx.stroke();
   }
 
-  // Labels
   ctx.font = '11px sans-serif';
   ctx.fillStyle = getComputedColor('--text-secondary');
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   const labelR = r * 0.55;
-  ctx.fillText('\u266D', cx + Math.cos(centsToAngle(-25)) * labelR, cy + Math.sin(centsToAngle(-25)) * labelR);
-  ctx.fillText('\u266F', cx + Math.cos(centsToAngle(25)) * labelR, cy + Math.sin(centsToAngle(25)) * labelR);
+  ctx.fillText(t.flat, cx + Math.cos(centsToAngle(-25)) * labelR, cy + Math.sin(centsToAngle(-25)) * labelR);
+  ctx.fillText(t.sharp, cx + Math.cos(centsToAngle(25)) * labelR, cy + Math.sin(centsToAngle(25)) * labelR);
 
-  // Needle
   const clamped = Math.max(-50, Math.min(50, cents));
   const angle = centsToAngle(clamped);
   const needleLen = r - 8;
@@ -320,7 +377,6 @@ function drawMeter(cents) {
   ctx.lineCap = 'round';
   ctx.stroke();
 
-  // Pivot dot
   ctx.beginPath();
   ctx.arc(cx, cy, 4, 0, Math.PI * 2);
   ctx.fillStyle = getComputedColor('--meter-bg');
@@ -370,6 +426,7 @@ function updateUI(freq) {
   drawMeter(note.cents);
 
   document.querySelectorAll('.string-btn').forEach((btn, i) => {
+    if (i >= STRINGS.length) return;
     const ratio = Math.abs(freq - STRINGS[i].freq) / STRINGS[i].freq;
     btn.classList.toggle('detected', ratio < 0.02);
   });
@@ -416,9 +473,9 @@ async function setupAudio() {
   isListening = true;
   smoothedFreq = 0;
   lastSignalTime = performance.now();
-  startBtn.textContent = 'STOP';
+  startBtn.textContent = t.stop;
   startBtn.classList.add('listening');
-  statusText.textContent = 'Listening \u2014 play a string!';
+  statusText.textContent = t.listening;
   loop();
 }
 
@@ -434,7 +491,7 @@ function stop() {
   stream = null;
   smoothedFreq = 0;
 
-  startBtn.textContent = 'START LISTENING';
+  startBtn.textContent = t.start;
   startBtn.classList.remove('listening');
   statusText.textContent = '';
   noteNameEl.textContent = '-';
@@ -453,29 +510,26 @@ startBtn.addEventListener('click', async () => {
     return;
   }
   try {
-    statusText.textContent = 'Requesting microphone access...';
+    statusText.textContent = t.requesting;
     await setupAudio();
-    micPermissionGranted = true;
   } catch (e) {
-    statusText.textContent = 'Microphone access denied.';
+    statusText.textContent = t.denied;
     console.error(e);
   }
 });
 
-// ===== Auto-start if permission already granted =====
+// ===== Auto-start =====
 async function tryAutoStart() {
   try {
     const result = await navigator.permissions.query({ name: 'microphone' });
     if (result.state === 'granted') {
-      statusText.textContent = 'Microphone access detected, starting...';
+      statusText.textContent = t.detected;
       await setupAudio();
-      micPermissionGranted = true;
     }
-  } catch {
-    // permissions API not supported or query failed — user clicks manually
-  }
+  } catch {}
 }
 
 // ===== Init =====
+applyLang();
 resizeCanvases();
 tryAutoStart();
