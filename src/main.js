@@ -118,8 +118,10 @@ app.innerHTML = `
       <canvas class="waveform-canvas" id="waveformCanvas"></canvas>
     </div>
 
-    <div class="strings-label" id="stringsLabel"></div>
-    <div class="strings" id="stringButtons"></div>
+    <div class="strings-section">
+      <div class="strings-label" id="stringsLabel"></div>
+      <div class="strings" id="stringButtons"></div>
+    </div>
 
     <div class="controls">
       <button class="start-btn" id="startBtn"></button>
